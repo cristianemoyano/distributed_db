@@ -11,8 +11,9 @@ def createCar(request):
     name = request.POST['nameInput']
     company = request.POST['companyInput']
     zone = request.POST['zoneInput']
+    user_pk = request.POST['userInput']
 
-    Car.objects.using(zone).create(name=name, company=company)
+    Car.objects.using(zone).create(name=name, company=company, user_pk=user_pk)
     messages.success(request, 'Vehículo: ' + name +' ¡creado!')
     return redirect('/cars')
 

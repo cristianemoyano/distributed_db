@@ -26,11 +26,14 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <input type="text" id="companyInput" name="companyInput" class="form-control" min="1" max="9"
-                            placeholder="Company" required>
+                        <input type="text" id="userInput" name="userInput" class="form-control"
+                            placeholder="Usuario" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Name"
+                        <input type="text" id="companyInput" name="companyInput" class="form-control" placeholder="Marca" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Modelo"
                             autofocus required>
                     </div>
 
@@ -52,6 +55,7 @@
                         <th>Compañía</th>
                         <th>Nombre</th>
                         <th>Zona</th>
+                        <th>Usuario</th>
                         <th colspan="2"> options</th>
                     </tr>
                 </thead>
@@ -63,6 +67,7 @@
                         <td>{{car.company}}</td>
                         <td>{{car.name}}</td>
                         <td>ZONA 1</td>
+                        <td>{{car.get_user }}</td>
                         <td><a href="{%  url 'editUrl' zone='1' slug=car.slug %}" class="btn btn-info">Editar</a></td>
                         <td><a href="{%  url 'deleteUrl' zone='1' slug=car.slug %}" class="btn btn-danger btnDelete">Eliminar</a></td>
                     </tr>
@@ -78,6 +83,7 @@
                         <th>Compañía</th>
                         <th>Nombre</th>
                         <th>Zona</th>
+                        <th>Usuario</th>
                         <th colspan="2"> options</th>
                     </tr>
                 </thead>
@@ -89,6 +95,7 @@
                         <td>{{car.company}}</td>
                         <td>{{car.name}}</td>
                         <td>ZONA 2</td>
+                        <td>{{car.get_user }}</td>
                         <td><a href="{%  url 'editUrl' zone='2' slug=car.slug %}" class="btn btn-info">Editar</a></td>
                         <td><a href="{%  url 'deleteUrl' zone='2' slug=car.slug %}" class="btn btn-danger btnDelete">Eliminar</a></td>
                     </tr>
@@ -104,6 +111,7 @@
                         <th>Compañía</th>
                         <th>Nombre</th>
                         <th>Zona</th>
+                        <th>Usuario</th>
                         <th colspan="2"> options</th>
                     </tr>
                 </thead>
@@ -115,6 +123,7 @@
                         <td>{{car.company}}</td>
                         <td>{{car.name}}</td>
                         <td>ZONA 3</td>
+                        <td>{{car.get_user }}</td>
                         <td><a href="{%  url 'editUrl' zone='3' slug=car.slug %}" class="btn btn-info">Editar</a></td>
                         <td><a href="{%  url 'deleteUrl' zone='3' slug=car.slug %}" class="btn btn-danger btnDelete">Eliminar</a></td>
                     </tr>

@@ -18,9 +18,16 @@ class Car(models.Model):
     name = models.CharField(max_length=50,null=True)
     slug = models.SlugField(null=True, blank=True)
     company = models.CharField(max_length=120)
+    user_pk = models.PositiveIntegerField()
 
-    def get_shard(self):
-        return self.company.user.shard
+    def get_user(self):
+        from django.contrib.auth import get_user_model
+        return get_user_model().objects.get(pk=self.user_pk)
+
+    @staticmethod
+    def get_user_from_id(user_pk):
+        from django.contrib.auth import get_user_model
+        return get_user_model().objects.get(pk=user_pk)
 
     class Meta:
         verbose_name = 'Car'
