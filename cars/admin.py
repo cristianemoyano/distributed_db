@@ -14,8 +14,10 @@ class CarAdmin(admin.ModelAdmin):
         # Tell Django to look for objects on the 'other' database.
         return super().get_queryset(request).using(ZONE_MAP[zone])
 
+class ShardedCarIDsAdmin(admin.ModelAdmin):
+    using = 'default'
+
 
 
 admin.site.register(Car, CarAdmin)
-
-admin.site.register(ShardedCarIDs, CarAdmin)
+admin.site.register(ShardedCarIDs, ShardedCarIDsAdmin)
