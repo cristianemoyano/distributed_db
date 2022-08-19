@@ -7,11 +7,6 @@ from django_sharding_library.models import ShardedByMixin, TableStrategyModel
 from django_sharding_library.fields import TableShardedIDField
 
 
-@shard_storage_config('postgres')
-class User(AbstractUser, ShardedByMixin):
-    pass
-
-
 @model_config(database='default')
 class ShardedCarIDs(TableStrategyModel):
     pass

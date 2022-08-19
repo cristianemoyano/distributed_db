@@ -16,6 +16,9 @@ class Command(BaseCommand):
             with connections['shard_3'].cursor() as cursor:
                 cursor.execute("DROP SCHEMA public CASCADE;")
                 cursor.execute("CREATE SCHEMA public;")
+            with connections['users'].cursor() as cursor:
+                cursor.execute("DROP SCHEMA public CASCADE;")
+                cursor.execute("CREATE SCHEMA public;")
 
         except Exception as exc:
             raise CommandError(str(exc))

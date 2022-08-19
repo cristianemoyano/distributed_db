@@ -1,9 +1,17 @@
 version: '3'
 services:
+    users:
+        image: postgres
+        volumes:
+            - users_vol:/var/lib/postgresql/data
+        environment:
+          - POSTGRES_DB=postgres
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=postgres
     shard_1:
         image: postgres
         volumes:
-            - postgres_bkp_logistics:/var/lib/postgresql/data
+            - shard_1_vol:/var/lib/postgresql/data
         environment:
           - POSTGRES_DB=postgres
           - POSTGRES_USER=postgres
@@ -11,7 +19,7 @@ services:
     shard_2:
         image: postgres
         volumes:
-            - postgres_bkp_products:/var/lib/postgresql/data
+            - shard_2_vol:/var/lib/postgresql/data
         environment:
           - POSTGRES_DB=postgres
           - POSTGRES_USER=postgres
@@ -19,7 +27,7 @@ services:
     shard_3:
         image: postgres
         volumes:
-            - postgres_bkp_products:/var/lib/postgresql/data
+            - shard_3_vol:/var/lib/postgresql/data
         environment:
           - POSTGRES_DB=postgres
           - POSTGRES_USER=postgres
@@ -41,5 +49,7 @@ services:
         - shard_3
 
 volumes:
-    postgres_bkp_logistics:
-    postgres_bkp_products:
+    users_vol:
+    shard_1_vol:
+    shard_2_vol:
+    shard_3_vol:

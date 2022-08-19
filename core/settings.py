@@ -85,6 +85,14 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # }
 
 DATABASES = {
+    'users': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_NAME'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': 'users',
+        'PORT': 5432,
+    },
     'shard_1': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ.get('POSTGRES_NAME'),
@@ -110,7 +118,7 @@ DATABASES = {
         'PORT': 5432,
     }
 }
-DATABASES['default'] = DATABASES['shard_1']
+DATABASES['default'] = DATABASES['users']
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -154,8 +162,3 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-# SHARDING
-
-AUTH_USER_MODEL = 'cars.User'

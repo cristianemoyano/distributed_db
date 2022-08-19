@@ -11,6 +11,7 @@ migrate:
 	docker-compose run web python manage.py migrate --database=shard_1
 	docker-compose run web python manage.py migrate --database=shard_2
 	docker-compose run web python manage.py migrate --database=shard_3
+	docker-compose run web python manage.py migrate --database=users
 
 migrations:
 	docker-compose run web python manage.py makemigrations
@@ -23,3 +24,7 @@ shell:
 
 resetdb:
 	docker-compose run web python manage.py resetdb
+
+
+superuser:
+	docker-compose run web python manage.py createsuperuser

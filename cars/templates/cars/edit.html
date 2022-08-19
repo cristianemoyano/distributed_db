@@ -5,10 +5,10 @@
 {% block body %}
 <div class="row">
     <div class="col-md-4 offset-md-4">
-        <h2>Editar</h2>
+        <h2>Editar Zona: {{ zone }}</h2>
         <div class="card">
             <div class="card-body">
-                <form action="{% url 'editUrl' car.slug %}"  method="POST">
+                <form action="{% url 'editUrl' zone=zone slug=car.slug %}"  method="POST">
                     {% csrf_token %}
                     <div class="form-group">
                         <input type="text" id="nameInput" name="nameInput" value="{{car.name}}" class="form-control" placeholder="Name"

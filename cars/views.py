@@ -28,8 +28,13 @@ def listCar(request):
 
 #------ Edit ------
 @require_http_methods(["GET","POST"])
-def editCar(request, slug):
-    car = Car.objects.get(slug=slug)
+def editCar(request, zone, slug):
+    ZONE_MAP = {
+        1: 'shard_1',
+        2: 'shard_2',
+        3: 'shard_3',
+    }
+    car = Car.objects.using(ZONE_MAP[zone]).get(slug=slug)
 
     if request.method == 'POST':
         name = request.POST['nameInput']
@@ -41,12 +46,17 @@ def editCar(request, slug):
         messages.success(request, 'Vehículo: ' + name +' ¡editado!')
         return redirect('/cars')
 
-    return render(request, "cars/edit.html", {"car": car})
+    return render(request, "cars/edit.html", {"car": car, "zone": zone})
 
 #------ Delete ------
 @require_http_methods(["GET"])
-def deleteCar(request, slug):
-    car = Car.objects.get(slug=slug)
+def deleteCar(request, zone, slug):
+    ZONE_MAP = {
+        1: 'shard_1',
+        2: 'shard_2',
+        3: 'shard_3',
+    }
+    car = Car.objects.using(ZONE_MAP[zone]).get(slug=slug)
 
     car.delete()
     messages.success(request, '¡Vehículo eliminado!')

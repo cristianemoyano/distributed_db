@@ -6,7 +6,7 @@ urlpatterns = [
     # Urls Developers
     path('', views.listCar, name='index'),
     path('register/', views.createCar),
-    path('edit/<slug:slug>', views.editCar, name='editUrl'),
-    path('delete/<slug:slug>', views.deleteCar, name='deleteUrl'),
+    path('edit/<int:zone>/<slug:slug>/', views.editCar, name='editUrl'),
+    path('delete/<int:zone>/<slug:slug>/', views.deleteCar, name='deleteUrl'),
 
 ]
