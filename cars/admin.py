@@ -5,7 +5,7 @@ class CarAdmin(admin.ModelAdmin):
     using = 'shard_1'
 
     def get_queryset(self, request):
-        zone = request.GET.get('e', 1)
+        zone = request.GET.get('e', '1')
         ZONE_MAP = {
             '1': 'shard_1',
             '2': 'shard_2',
