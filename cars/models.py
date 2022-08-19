@@ -1,9 +1,8 @@
 from django.utils.text import slugify
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 
-from django_sharding_library.decorators import shard_storage_config, model_config
-from django_sharding_library.models import ShardedByMixin, TableStrategyModel
+from django_sharding_library.decorators import model_config
+from django_sharding_library.models import TableStrategyModel
 from django_sharding_library.fields import TableShardedIDField
 
 
