@@ -17,7 +17,7 @@ migrations:
 	docker-compose run web python manage.py makemigrations
 
 up:
-	docker-compose up
+	docker-compose up --build --remove-orphans
 
 shell:
 	docker-compose run web python manage.py shell   
