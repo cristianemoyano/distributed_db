@@ -1,0 +1,36 @@
+version: '3'
+services:
+    db_logistics:
+        image: postgres
+        volumes:
+            - postgres_bkp_logistics:/var/lib/postgresql/data
+        environment:
+          - POSTGRES_DB=postgres
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=postgres
+    db_products:
+        image: postgres
+        volumes:
+            - postgres_bkp_products:/var/lib/postgresql/data
+        environment:
+          - POSTGRES_DB=postgres
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=postgres
+    web:
+      build: .
+      command: python manage.py runserver 0.0.0.0:8000
+      volumes:
+        - .:/code
+      ports:
+        - "8000:8000"
+      environment:
+        - POSTGRES_NAME=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+      depends_on:
+        - db_logistics
+        - db_products
+
+volumes:
+    postgres_bkp_logistics:
+    postgres_bkp_products:
