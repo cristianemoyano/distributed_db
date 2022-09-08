@@ -1,5 +1,6 @@
 from django.utils.text import slugify
 from django.db import models
+from django.contrib.auth.models import User
 
 from django_sharding_library.decorators import model_config
 from django_sharding_library.models import TableStrategyModel
@@ -48,3 +49,17 @@ class Car(models.Model):
 
             self.slug = slug
         super().save(*args, **kwargs)
+
+
+
+class Address(models.Model):
+    city = models.CharField(max_length=255,null=True)
+    country = models.CharField(max_length=255,null=True)
+    street_name = models.CharField(max_length=255,null=True)
+    street_number = models.CharField(max_length=50,null=True)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    class Meta:
+        app_label = 'cars'
+
+    def __str__(self):
+        return f"{self.street_name} {self.street_number}, {self.city}, {self.country}"

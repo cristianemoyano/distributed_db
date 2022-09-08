@@ -1,13 +1,35 @@
 version: '3'
 services:
     users:
-        image: postgres
-        volumes:
-            - users_vol:/var/lib/postgresql/data
+        build: ./dbs/
+        image: 'danieldent/postgres-replication'
+        restart: 'always'
         environment:
           - POSTGRES_DB=postgres
           - POSTGRES_USER=postgres
           - POSTGRES_PASSWORD=postgres
+          - PGDATA=/var/lib/postgresql/data/pgdata
+        volumes:
+          - '/var/lib/postgresql/data'
+        expose:
+          - '5432'
+    users-replica:
+      build: ./dbs/
+      image: 'danieldent/postgres-replication'
+      restart: 'always'
+      environment:
+        - POSTGRES_DB=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - PGDATA=/var/lib/postgresql/data/pgdata
+        - REPLICATE_FROM=users
+      volumes:
+        - '/var/lib/postgresql/data'
+      expose:
+        - '5432'
+      links:
+        - 'users'  
+
     shard_1:
         image: postgres
         volumes:
@@ -50,6 +72,7 @@ services:
 
 volumes:
     users_vol:
+    users_slave_vol:
     shard_1_vol:
     shard_2_vol:
     shard_3_vol:

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from cars.models import Car, ShardedCarIDs
+from cars.models import Car, ShardedCarIDs, Address
 
 class CarAdmin(admin.ModelAdmin):
     using = 'shard_1'
@@ -19,5 +19,10 @@ class ShardedCarIDsAdmin(admin.ModelAdmin):
 
 
 
+class AddressAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(Car, CarAdmin)
 admin.site.register(ShardedCarIDs, ShardedCarIDsAdmin)
+admin.site.register(Address, AddressAdmin)

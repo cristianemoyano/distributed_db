@@ -84,6 +84,8 @@ WSGI_APPLICATION = 'core.wsgi.application'
 #     }
 # }
 
+DATABASE_ROUTERS = ['core.routers.CarsServiceRouter']
+
 DATABASES = {
     'users': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -91,6 +93,14 @@ DATABASES = {
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
         'HOST': 'users',
+        'PORT': 5432,
+    },
+    'users-replica': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_NAME'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': 'users-replica',
         'PORT': 5432,
     },
     'shard_1': {
