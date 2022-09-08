@@ -37,3 +37,17 @@ resetdb:
 
 superuser:
 	docker-compose run web python manage.py createsuperuser
+
+
+stop_replica:
+	docker-compose stop users-replica
+
+start_replica:
+	docker-compose start users-replica
+
+
+stop_users:
+	docker-compose stop users
+
+start_users:
+	docker-compose start users
