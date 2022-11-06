@@ -25,6 +25,9 @@ migrations:
 	docker-compose run web python manage.py makemigrations markets
 
 up:
+	docker-compose up --remove-orphans
+
+build:
 	docker-compose up --build --remove-orphans
 
 run:

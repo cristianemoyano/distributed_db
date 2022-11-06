@@ -15,8 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from markets.admin import admin_shard1, admin_shard2, admin_shard3
 
 urlpatterns = [
     path('markets/', include('markets.urls')),
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
+    # ADMIN
+    path('admin-shard1/', admin_shard1.urls, name='admin_shard_1'),
+    path('admin-shard2/', admin_shard2.urls, name='admin_shard_2'),
+    path('admin-shard3/', admin_shard3.urls, name='admin_shard_3'),
 ]

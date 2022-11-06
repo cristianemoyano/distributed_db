@@ -18,10 +18,24 @@ class ShardedMarketIDs(TableStrategyModel):
 # the mixin provided in order to save the shard on the user.
 @shard_storage_config(shard_group='markets')
 class User(AbstractUser, ShardedByMixin):
+    ZONE_1 = 'zone_1'
+    ZONE_2 = 'zone_2'
+    ZONE_3 = 'zone_3'
+    ZONE_CHOICES = [
+        (ZONE_1, 'Zona 1'),
+        (ZONE_2, 'Zona 2'),
+        (ZONE_3, 'Zona 3'),
+    ]
     # Patch for Django 1.11
     groups = None
     user_permissions = None
-    zone = models.CharField(max_length=120, null=True, blank=True)
+    zone = models.CharField(
+        max_length=120,
+        choices=ZONE_CHOICES,
+        default=ZONE_1,
+        null=True,
+        blank=True,
+    )
 
 
 @model_config(shard_group='markets')
