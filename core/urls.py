@@ -18,7 +18,7 @@ from django.urls import include, path
 from markets.admin import admin_shard1, admin_shard2, admin_shard3
 
 urlpatterns = [
-    path('markets/', include('markets.urls')),
+    path('', include('markets.urls')),
     path('admin/', admin.site.urls, name='admin'),
     # ADMIN
     path('admin-shard1/', admin_shard1.urls, name='admin_shard_1'),
