@@ -24,4 +24,3 @@ class Command(BaseCommand):
             raise CommandError(str(exc))
         
         self.stdout.write(self.style.SUCCESS('Successfully db reseted.'))
-

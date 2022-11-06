@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+from django_sharding_library.settings_helpers import database_configs
+
+from core.sharding_functions import ZoneBasedBucketingStrategy
+from django_sharding_library.routing_read_strategies import PrimaryOnlyRoutingStrategy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,8 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Third app
+    'django_sharding',
     # Internal apps
-    'cars',
     'markets',
 ]
 
@@ -87,7 +92,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 #     }
 # }
 
-DATABASE_ROUTERS = ['core.routers.CarsServiceRouter']
+DATABASE_ROUTERS = [
+    'core.routers.MarketsServiceRouter',
+]
+
+AUTH_USER_MODEL = 'markets.User'
 
 DATABASES = {
     'users': {
@@ -132,6 +141,59 @@ DATABASES = {
     }
 }
 DATABASES['default'] = DATABASES['users']
+
+user = os.environ.get('POSTGRES_USER')
+pwd = os.environ.get('POSTGRES_PASSWORD')
+name = os.environ.get('POSTGRES_NAME')
+
+DATABASES = database_configs(databases_dict={
+    'unsharded_databases': [
+        {
+            'name': 'users',
+            'environment_variable': 'USERS_DATABASE_URL',
+            'default_database_url': f'postgres://{user}:{pwd}@users/{name}',
+            'replicas': [
+                {
+                    'name': 'users-replica',
+                    'environment_variable': 'USERS_REPLICA_DATABASE_URL',
+                    'default_database_url': f'postgres://{user}:{pwd}@users-replica/{name}',
+                    'database_name': 'users-replica'
+                },
+            ],
+        },
+    ],
+    'sharded_databases': [
+        {
+            'name': 'shard_1',
+            'shard_group': 'markets',
+            'environment_variable': 'SHARD_001_DATABASE_URL',
+            'default_database_url': f'postgres://{user}:{pwd}@shard_1/{name}'
+        },
+        {
+            'name': 'shard_2',
+            'shard_group': 'markets',
+            'environment_variable': 'SHARD_002_DATABASE_URL',
+            'default_database_url': f'postgres://{user}:{pwd}@shard_2/{name}'
+        },
+        {
+            'name': 'shard_3',
+            'shard_group': 'markets',
+            'environment_variable': 'SHARD_003_DATABASE_URL',
+            'default_database_url': f'postgres://{user}:{pwd}@shard_3/{name}'
+        },
+    ]
+})
+DATABASES['default'] = DATABASES['users']
+
+DJANGO_SHARDING_SETTINGS = {
+    'markets': {
+        'BUCKETING_STRATEGY': ZoneBasedBucketingStrategy(
+            shard_group='markets', databases=DATABASES
+        ),
+        'ROUTING_STRATEGY': PrimaryOnlyRoutingStrategy(databases=DATABASES),
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

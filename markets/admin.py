@@ -1,5 +1,5 @@
 from django.contrib import admin
-from markets.models import Market, ShardedMarketIDs
+from markets.models import Market, ShardedMarketIDs, User
 
 class MarketAdmin(admin.ModelAdmin):
     using = 'shard_1'
@@ -18,6 +18,10 @@ class ShardedMarketIDsAdmin(admin.ModelAdmin):
     using = 'default'
 
 
+class UserAdmin(admin.ModelAdmin):
+    using = 'default'
+
 admin.site.register(Market, MarketAdmin)
 admin.site.register(ShardedMarketIDs, ShardedMarketIDsAdmin)
+admin.site.register(User, UserAdmin)
 

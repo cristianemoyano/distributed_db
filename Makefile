@@ -18,14 +18,17 @@ migrate:
 	docker-compose run web python manage.py migrate --database=shard_2
 	docker-compose run web python manage.py migrate --database=shard_3
 	docker-compose run web python manage.py migrate --database=users
-	docker-compose run web python manage.py migrate --database=users-replica
+	docker-compose run web python manage.py migrate --database=all
 
 migrations:
 	docker-compose run web python manage.py makemigrations
-	docker-compose run web python manage.py makemigrations cars
+	docker-compose run web python manage.py makemigrations markets
 
 up:
 	docker-compose up --build --remove-orphans
+
+run:
+	docker-compose run --rm --service-ports web
 
 shell:
 	docker-compose run web python manage.py shell

@@ -12,18 +12,16 @@ from itertools import chain
 def createMarket(request):
     name = request.POST['nameInput']
     address = request.POST['addressInput']
-    zone = request.POST['zoneInput']
     user_pk = request.POST['userInput']
-
-    print(request.POST)
-
     sponsored = request.POST.get('sponsoredInput', False)
     local_delivery = request.POST.get('localDeliveryInput', False)
     delivery_time = request.POST['deliveryTimeInput']
     delivery_cost = request.POST['deliveryCostInput']
     stars = request.POST['starsInput']
 
-    Market.objects.using(zone).create(
+    user = User.objects.get(id=user_pk)
+
+    Market.objects.using(user.shard).create(
         name=name,
         address=address,
         sponsored=sponsored,
@@ -44,7 +42,6 @@ def listMarket(request):
     market_3 = Market.objects.using('shard_3').all()
 
     objects = list(chain(market_1, market_2, market_3))
-
     return render(request, "markets/index.html", {
         "zone_1": market_1,
         "zone_2": market_2,

@@ -2,14 +2,15 @@ import logging
 
 logger: logging.Logger = logging.getLogger(__name__)
 
-CARS_SERVICE_APP_LABEL: str = 'cars'
+MARKET_SERVICE_APP_LABEL: str = 'markets'
 
-class CarsServiceRouter:
+
+class MarketsServiceRouter:
     def db_for_read(self, model, **hints) -> str:
         """
         Reads go to a replica.
         """
-        if model._meta.app_label in [CARS_SERVICE_APP_LABEL]:
+        if model._meta.app_label in [MARKET_SERVICE_APP_LABEL]:
             print(f"REPLICA DB:  Model: {model} - Hints: {hints} - App label: {model._meta.app_label}")
             return 'users-replica'
 
@@ -18,7 +19,7 @@ class CarsServiceRouter:
         Writes always go to primary.
         """
         
-        if model._meta.app_label in [CARS_SERVICE_APP_LABEL]:
+        if model._meta.app_label in [MARKET_SERVICE_APP_LABEL]:
             print(f"PRIMARY DB: Model: {model} - Hints: {hints} - App label: {model._meta.app_label}")
             return 'users'
 

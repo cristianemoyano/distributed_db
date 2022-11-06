@@ -13,6 +13,8 @@ services:
           - '/var/lib/postgresql/data'
         expose:
           - '5432'
+        networks:
+            - appNetwork
     users-replica:
       build: ./dbs/
       image: 'danieldent/postgres-replication'
@@ -28,7 +30,9 @@ services:
       expose:
         - '5432'
       links:
-        - 'users'  
+        - 'users'
+      networks:
+          - appNetwork
 
     shard_1:
         image: postgres
@@ -38,6 +42,8 @@ services:
           - POSTGRES_DB=postgres
           - POSTGRES_USER=postgres
           - POSTGRES_PASSWORD=postgres
+        networks:
+            - appNetwork
     shard_2:
         image: postgres
         volumes:
@@ -46,6 +52,8 @@ services:
           - POSTGRES_DB=postgres
           - POSTGRES_USER=postgres
           - POSTGRES_PASSWORD=postgres
+        networks:
+            - appNetwork
     shard_3:
         image: postgres
         volumes:
@@ -54,6 +62,8 @@ services:
           - POSTGRES_DB=postgres
           - POSTGRES_USER=postgres
           - POSTGRES_PASSWORD=postgres
+        networks:
+            - appNetwork
     web:
       build: .
       command: python manage.py runserver 0.0.0.0:8000
@@ -61,6 +71,8 @@ services:
         - .:/code
       ports:
         - "8000:8000"
+      stdin_open: true
+      tty: true
       environment:
         - POSTGRES_NAME=postgres
         - POSTGRES_USER=postgres
@@ -69,10 +81,39 @@ services:
         - shard_1
         - shard_2
         - shard_3
+        - users
+        - users-replica
+      networks:
+          - appNetwork
 
+    pgAdmin:
+      container_name: pgAdmin
+      # restart: unless-stopped
+      image: dpage/pgadmin4:4.29
+      environment:
+          PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+          PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+          PGADMIN_LISTEN_PORT: 5050
+      volumes:
+          - pgadmin:/root/.pgadmin
+      ports:
+          - "5050:5050"
+      depends_on:
+        - shard_1
+        - shard_2
+        - shard_3
+        - users
+        - users-replica
+      networks:
+          - appNetwork
 volumes:
     users_vol:
     users_slave_vol:
     shard_1_vol:
     shard_2_vol:
     shard_3_vol:
+    pgadmin:
+
+networks:
+    appNetwork:
+        driver: bridge

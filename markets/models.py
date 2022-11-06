@@ -1,18 +1,30 @@
 from django.utils.text import slugify
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
 
-from django_sharding_library.decorators import model_config
-from django_sharding_library.models import TableStrategyModel
+from django_sharding_library.decorators import model_config, shard_storage_config
+from django_sharding_library.models import TableStrategyModel, ShardedByMixin
 from django_sharding_library.fields import TableShardedIDField
 
 
+# A model for use with a sharded model to generate pk's using
+# an autoincrement field on the backing TableStrategyModel.
 @model_config(database='default')
 class ShardedMarketIDs(TableStrategyModel):
     pass
 
+# An implementation of the extension of a the Django user to add
+# the mixin provided in order to save the shard on the user.
+@shard_storage_config(shard_group='markets')
+class User(AbstractUser, ShardedByMixin):
+    # Patch for Django 1.11
+    groups = None
+    user_permissions = None
+    zone = models.CharField(max_length=120, null=True, blank=True)
 
-@model_config(database='default')
+
+@model_config(shard_group='markets')
 class Market(models.Model):
     id = TableShardedIDField(primary_key=True, source_table_name='markets.ShardedMarketIDs')
     name = models.CharField(max_length=50,null=True)
@@ -25,8 +37,18 @@ class Market(models.Model):
     delivery_cost = models.PositiveIntegerField(null=True, blank=True)
     stars = models.CharField(max_length=3, null=True, blank=True)
 
-
     user_pk = models.PositiveIntegerField()
+
+    def get_shard(self):
+        return User.objects.get(pk=self.user_pk).shard
+    
+    @property
+    def shard(self):
+        return User.objects.get(pk=self.user_pk).shard
+
+    @staticmethod
+    def get_shard_from_id(user_pk):
+        return User.objects.get(pk=user_pk).shard
 
     def get_user(self):
         from django.contrib.auth import get_user_model
@@ -38,6 +60,7 @@ class Market(models.Model):
         return get_user_model().objects.get(pk=user_pk)
 
     class Meta:
+        app_label = 'markets'
         verbose_name = 'Market'
         verbose_name_plural = 'Markets'
 
