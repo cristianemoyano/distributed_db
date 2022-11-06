@@ -54,9 +54,9 @@ def listMarket(request):
 @require_http_methods(["GET","POST"])
 def editMarket(request, zone, slug):
     ZONE_MAP = {
-        1: 'shard_1',
-        2: 'shard_2',
-        3: 'shard_3',
+        'zone_1': 'shard_1',
+        'zone_2': 'shard_2',
+        'zone_3': 'shard_3',
     }
     market = Market.objects.using(ZONE_MAP[zone]).get(slug=slug)
 
@@ -76,12 +76,12 @@ def editMarket(request, zone, slug):
 @require_http_methods(["GET"])
 def deleteMarket(request, zone, slug):
     ZONE_MAP = {
-        1: 'shard_1',
-        2: 'shard_2',
-        3: 'shard_3',
+        'zone_1': 'shard_1',
+        'zone_2': 'shard_2',
+        'zone_3': 'shard_3',
     }
+    
     market = Market.objects.using(ZONE_MAP[zone]).get(slug=slug)
-
     market.delete()
     messages.success(request, 'Mercado eliminado!')
     return redirect('/markets')  

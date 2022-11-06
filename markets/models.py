@@ -41,7 +41,11 @@ class Market(models.Model):
 
     def get_shard(self):
         return User.objects.get(pk=self.user_pk).shard
-    
+
+    @property
+    def zone(self):
+        return User.objects.get(pk=self.user_pk).zone
+
     @property
     def shard(self):
         return User.objects.get(pk=self.user_pk).shard

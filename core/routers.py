@@ -1,6 +1,7 @@
 import logging
 
 logger: logging.Logger = logging.getLogger(__name__)
+from markets.models import User
 
 MARKET_SERVICE_APP_LABEL: str = 'markets'
 
@@ -10,7 +11,7 @@ class MarketsServiceRouter:
         """
         Reads go to a replica.
         """
-        if model._meta.app_label in [MARKET_SERVICE_APP_LABEL]:
+        if model._meta.app_label in [MARKET_SERVICE_APP_LABEL] and isinstance(model, User):
             print(f"REPLICA DB:  Model: {model} - Hints: {hints} - App label: {model._meta.app_label}")
             return 'users-replica'
 
@@ -19,7 +20,7 @@ class MarketsServiceRouter:
         Writes always go to primary.
         """
         
-        if model._meta.app_label in [MARKET_SERVICE_APP_LABEL]:
+        if model._meta.app_label in [MARKET_SERVICE_APP_LABEL] and isinstance(model, User):
             print(f"PRIMARY DB: Model: {model} - Hints: {hints} - App label: {model._meta.app_label}")
             return 'users'
 

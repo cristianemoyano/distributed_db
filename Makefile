@@ -54,3 +54,6 @@ stop_users:
 
 start_users:
 	docker-compose start users
+
+pgadmin:
+	open http://localhost:5050/login
