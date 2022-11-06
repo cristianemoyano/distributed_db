@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %} Form {% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="text-dark">{{ message }}</strong>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <h2>Mercados</h2>
+
+        <div class="card">
+            <div class="card-body">
+                <form action="/markets/add/" method="POST">{% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Nombre"
+                            autofocus required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="addressInput" name="addressInput" class="form-control"
+                            placeholder="Dirección" required>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="sponsoredInput"
+                            name="sponsoredInput">
+                        <label class="form-check-label" for="sponsoredInput">
+                            Patrocinado
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="localDeliveryInput"
+                            name="localDeliveryInput">
+                        <label class="form-check-label" for="localDeliveryInput">
+                            Entrega del local
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Demora:</label>
+                        <input type="text" id="deliveryTimeInput" name="deliveryTimeInput" class="form-control"
+                            value="30-45" autofocus required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Envío:</label>
+                        <input type="text" id="deliveryCostInput" name="deliveryCostInput" class="form-control"
+                            value="129" autofocus required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Estrellas:</label>
+                        <input type="text" id="starsInput" name="starsInput" class="form-control" value="3.4" autofocus
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Elegir zona:</label>
+                        <select class="form-control" id="zoneInput" name="zoneInput">
+                            <option value="shard_1">Zona 1</option>
+                            <option value="shard_2">Zona 2</option>
+                            <option value="shard_3">Zona 3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="userInput" name="userInput" class="form-control" placeholder="User ID"
+                            value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-info btn-block text-white">Añadir</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
+
+        <div class="card">
+            <ul class="list-group list-group-flush">
+                {% for market in objects %}
+                <li class="list-group-item">
+                    <!-- START ITEM -->
+                    <div class="row">
+                        <div class="col-8">
+                            <!-- LEFT -->
+                            <img src="https://img.freepik.com/premium-vector/street-market-business-company-logo_23-2148462526.jpg?w=2000"
+                                class="rounded float-left" width="90" alt="...">
+    
+                            {% if market.sponsored %}
+                            <span class="m-3 text-muted">
+                                Patrocinado
+                                <br>
+                            </span>
+                            {% endif %}
+                            <span class="m-3">
+                                <a href="{%  url 'edit_markets' zone='1' slug=market.slug %}" class="">
+                                    <strong>{{ market.name }}</strong>
+                                </a>
+                                <br>
+                            </span>
+                            {% if market.local_delivery %}
+                            <span class="m-3">
+                                <span class="badge badge-secondary">Entrega del local</span>
+                                <br>
+                            </span>
+                            {% endif %}
+                            <span class="m-3">
+                                <small>
+                                    {{ market.delivery_time }} min · Envío $ {{ market.delivery_cost }} · {{ market.address }}
+                                </small>
+                            </span>
+                            <!-- LEFT -->
+                        </div>
+                        <div class="col-sm text-right">
+                            <!-- RIGHT -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-star-fill " viewBox="0 0 16 16">
+                                <path
+                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                            </svg>
+                            {{ market.stars }}
+                            <br>
+                            <br>
+
+                            <!-- RIGHT -->
+                            <br>
+                            <a href="{%  url 'delete_markets' zone='1' slug=market.slug %}"
+                                class="btn btn-sm btn-danger btnDelete">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-trash3" viewBox="0 0 16 16">
+                                    <path
+                                        d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- END ITEM -->
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+
+
+    
+    {% endblock %}
