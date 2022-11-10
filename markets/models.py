@@ -63,6 +63,10 @@ class Market(models.Model):
     @property
     def shard(self):
         return User.objects.get(pk=self.user_pk).shard
+    
+    @property
+    def user(self):
+        return User.objects.get(pk=self.user_pk)
 
     @staticmethod
     def get_shard_from_id(user_pk):

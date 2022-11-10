@@ -17,7 +17,7 @@
 
         <div class="card">
             <div class="card-body">
-                <form action="/markets/add/" method="POST">{% csrf_token %}
+                <form action="/add/" method="POST">{% csrf_token %}
                     <div class="form-group">
                         <input type="text" id="nameInput" name="nameInput" class="form-control" placeholder="Nombre"
                             autofocus required>
@@ -75,7 +75,7 @@
                 <li class="list-group-item">
                     <!-- START ITEM -->
                     <div class="row">
-                        <div class="col-8">
+                        <div class="col-9">
                             <!-- LEFT -->
                             <img src="https://img.freepik.com/premium-vector/street-market-business-company-logo_23-2148462526.jpg?w=2000"
                                 class="rounded float-left" width="90" alt="...">
@@ -101,9 +101,12 @@
                             <span class="m-3">
                                 <small>
                                     {{ market.delivery_time }} min · Envío $ {{ market.delivery_cost }} · {{ market.address }} ·
-                                    <span class="badge badge-secondary">{{ market.shard }}</span>
+                                    <span class="badge badge-secondary">{{ market.shard }}</span> · User ID: <span class="badge badge-warning"> {{ market.user.id }}</span>
                                 </small>
+                                <br>
+                                
                             </span>
+
                             <!-- LEFT -->
                         </div>
                         <div class="col-sm text-right">

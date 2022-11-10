@@ -32,7 +32,7 @@ def createMarket(request):
         user_pk=user_pk,
     )
     messages.success(request, 'Mercado: ' + name +' ¡creado!')
-    return redirect('/markets')
+    return redirect('/')
 
 #------ List ------
 @require_http_methods(["GET"])
@@ -84,4 +84,4 @@ def deleteMarket(request, zone, slug):
     market = Market.objects.using(ZONE_MAP[zone]).get(slug=slug)
     market.delete()
     messages.success(request, 'Mercado eliminado!')
-    return redirect('/markets')  
+    return redirect('/')  
